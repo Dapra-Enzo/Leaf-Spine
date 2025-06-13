@@ -460,11 +460,22 @@ Dans l’onglet **Advertisements**, nous retrouvons l’ensemble des annonces de
 
 ---
 
-## 6. Vérification des routes
-
+## 6. Vérification 
+# Tests de connectivité depuis le MikroTik
 Enfin, il est possible de vérifier l’ensemble des routes apprises en ligne de commande avec `/ip route print`, ce qui permet de voir la cohérence du routage, et nous voyons bien les routes :
 
 ![alt text](../image/mikrotik_commande_verifroutes.png)
+
+Pour valider l’intégration du routeur MikroTik dans l’infrastructure réseau et vérifier le bon fonctionnement des protocoles de routage, plusieurs tests ont été réalisés depuis ce routeur :
+![alt text](../image/pingmicro.png)
+
+Ping vers le leaf du réseau interne du groupe de Mathis : ce test confirme que le MikroTik est bien capable d’atteindre les équipements internes des autres groupes, prouvant que le routage intergroupe est fonctionnel.
+
+Ping vers l’adresse IP du Catalyst du groupe de Mathias : ce test démontre que le BGP est correctement configuré et que les routes échangées permettent la communication entre les équipements de chaque groupe.
+
+Ping vers notre propre leaf : ce test permet de vérifier que le protocole OSPF est bien opérationnel au sein de notre réseau interne, et que la connectivité est assurée entre le MikroTik et nos équipements via OSPF.
+
+
 
 ---
 
