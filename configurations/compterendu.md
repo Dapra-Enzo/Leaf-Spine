@@ -5,7 +5,7 @@
 ---
 <h1 style="color: #339CFF;">Schéma Représentatif</h1>
 
-![alt text](../schémaok.png)
+![alt text](../image/schéma_final.png)
 ---
 <h1 style="color: #339CFF;">Plan d'adressage</h1>
 
