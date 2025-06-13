@@ -515,9 +515,10 @@ management api gnmi
 
 J’ai ensuite écrit un fichier de configuration gnmic.yaml pour connecter gnmic à tous mes routeurs et définir les métriques à collecter.
 
-
+```
 
 targets:
+
   leaf1:
     address: 172.20.20.3:6030
     username: gnmiuser
@@ -636,8 +637,11 @@ scrape_configs:
       - targets: ['10.202.0.121:9804']
 
     # Lancer Prometheus  gnmic et Grafana via Docker
+```
 
 J’ai ensuite utilisé un fichier docker-compose.yml pour lancer Prometheus gnmic, et Grafana ensemble: 
+
+```yaml
 version: '3.8'
 
 services:
@@ -682,9 +686,10 @@ volumes:
 networks:
   monitor-net:
     driver: bridge
+```
  Puis je lance le tout avec la commande suivante :
 
-docker-compose up -d
+`docker-compose up -d`
 
 ![alt text](../image/dockerpstelemetrie.png)
 
