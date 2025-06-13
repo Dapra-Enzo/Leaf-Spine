@@ -6,7 +6,7 @@ Bienvenue sur le dépôt de la SAE DevCloud 4D01,de la team Yokoso : une infra
 
 ## 🗺️ Schéma réseau
 
-![Schéma réseau](docs/schema_reseau.png)
+![Schéma réseau](image/schéma_final.png)
 > *Le schéma sera ajouté ici dès qu’il est prêt.*
 
 ---
