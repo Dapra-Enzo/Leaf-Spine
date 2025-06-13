@@ -343,11 +343,45 @@ neighbor 192.168.254.2 remote-as 64555       // ibgp
 
 ---
 
-## Vérification BGP
+## Vérification 
 
-On atteste du fonctionnement avec les résultats suivants :
+Afin de vérifier le bon fonctionnement de mon switch Catalyst et la connectivité réseau globale, j’ai réalisé une série de tests techniques :
+    Vérification de la configuration BGP
+    J’ai utilisé la commande suivante pour afficher la section BGP de la configuration du routeur :
 
-![alt text](../image/neighbor.png)
+
+![alt texte](../image/shrun.png)
+
+
+Vérification de l’état des sessions BGP:
+
+![alt texte](../image/bgpsum.png)
+
+Cette commande m’a permis de m’assurer que les sessions BGP étaient bien établies avec les voisins attendus.
+
+Tests de connectivité par ping
+Pour confirmer l’accessibilité des services interconnectés, j’ai effectué plusieurs pings :
+
+![alt texte](../image/pingcata.png)
+
+Premier ping : vers un service hébergé par un autre groupe, pour valider la connectivité inter-groupe.
+
+Deuxième ping : vers le serveur HAProxy, afin de m’assurer que le répartiteur de charge était joignable.
+
+Troisième ping : vers le serveur DNS, pour vérifier la résolution de noms.
+
+Quatrième ping : vers le service VPN, pour confirmer l’accès sécurisé via le tunnel.
+    Tests de routage avec traceroute
+
+
+![alt texte](../image/traceroutecata.png)
+
+  Traceroute vers notre propre serveur DNS : ce test a permis de visualiser le chemin emprunté par les paquets jusqu’à notre DNS interne et de vérifier qu’il n’y avait pas de coupure ou de latence excessive.
+
+  Traceroute vers le serveur DNS du groupe Triforce : ce test a validé l’accessibilité entre groupes via BGP, et a permis d’observer le passage par les routeurs Spine/Leaf configurés.
+
+L’ensemble de ces tests a permis de valider le bon fonctionnement du Catalyst et la connectivité des services dans l’infrastructure.
+
 
 ---
 
