@@ -75,6 +75,13 @@
 | Equipement | Interface   | Adresse IP      | Masque            | Description/Peer |
 |------------|-------------|-----------------|-------------------|------------------|
 | yokoso-web | eth1        | 192.168.94.2    | 255.255.255.252   | to-leaf01        |
+| yokoso-web2| eth1        | 192.168.43.2    | 255.255.255.252   | to-leaf02        |
+| yokoso-web3| eth1        | 192.168.69.2    | 255.255.255.252   | to-leaf02        |
+
+### HAProxy
+| Equipement | Interface   | Adresse IP      | Masque            | Description/Peer |
+|------------|-------------|-----------------|-------------------|------------------|
+| haproxy    | eth1        | 192.168.73.2    | 255.255.255.0     | to-leaf02        |
 
 ### dns
 | Equipement | Interface   | Adresse IP      | Masque            | Description/Peer |
@@ -521,7 +528,7 @@ Pour l'intégration du VPN nous avons opté pour Wireguard Easy une solution qui
   docker pull weejewel/wg-easy:latest
   ```
 
-- **Modification du docker compose**
+- **Ajout du docker compose**
 ```shell
 volumes:
   etc_wireguard:
@@ -567,12 +574,12 @@ networks:
 ```
 
 
-Le bon fonctionnement de WireGuard est confirmé par la présence du point rouge indiquant une connexion active, ainsi que par l’affichage des débits en émission et en réception.
+Une fois le docker-compose up on peut verifier le bon fonctionnement de WireGuard sur l'interface web http://10.202.30.1:51821 est confirmé par la présence du point rouge indiquant une connexion active, ainsi que par l’affichage des débits en émission et en réception.
 
 ![alt text](../image/wireguardserver.png)
 
 ## Partie client ##
- creation du wg0.conf :
+ Il faut côté client simple faire creation du wg0.conf :
 
  `nano wg0.conf `
 ```
@@ -590,35 +597,29 @@ PersistentKeepalive = 0
 Endpoint = 10.202.30.1:51820
 
 ```
+
+On peut verifier déjà son bon fonctionnement du peer avec la commande `wg show`
+
 ![alt text](../image/vpnshow.png)
 
 
-le groupe de mathis qui est depuis son datacenter arrive a acceder aux serveur dns dans notre data center grace aux vpn :
+Le groupe de mathis, qui est depuis son datacenter, arrive a acceder aux serveur dns dans notre data center grace aux tunnel vpn wireguard :
 
 ![alt text](../image/digmathis.png)
 
-nous accedons aussi aux leur grace aux vpn :
+Nous aussi accedons aux leurs grace a wireguard-easy :
 
 ![alt text](../image/digdemathis.png)
+
 ---
-<h2 style="color: #339CFF;">Monitoring/Supervision</h2>
 
 #  Mise en place de la télémétrie avec gNMI
 
 ##  Objectif
 
- j’ai mis en place une solution de **télémétrie réseau avec gNMI** pour superviser en temps réel les performances de mes routeurs **Arista cEOS** déployés dans une topologie **Leaf & Spine** avec Containerlab.
+Nous avons mis en place une solution de **télémétrie réseau avec gNMI** pour superviser/monitorer en temps réel les performances de mes routeurs **Arista cEOS** déployés dans une topologie **Leaf & Spine** avec Containerlab.
 
-Le but était de collecter automatiquement des métriques réseau (trafic, CPU, interfaces, etc.) et de les visualiser via une stack d’observabilité moderne (Prometheus + Grafana).
-
----
-
-##  Architecture mise en place
-
-- 5 routeurs Arista cEOS : `leaf1`, `leaf2`, `leaf3`, `spine1`, `spine2`
-- Collecteur télémétrique : `gnmic` (récupère les données via gNMI)
-- Base de données de séries temporelles : `Prometheus`
-- Interface de visualisation : `Grafana`
+Le but était de collecter automatiquement des métriques réseau (ex : bgp ospf) et de les visualiser via une stack d’observabilité  (Prometheus + Grafana + gnmic).
 
 ---
 
@@ -763,7 +764,7 @@ scrape_configs:
     # Lancer Prometheus  gnmic et Grafana via Docker
 ```
 
-J’ai ensuite utilisé un fichier docker-compose.yml pour lancer Prometheus gnmic, et Grafana ensemble: 
+J’ai ensuite utilisé un fichier docker-compose.yml pour lancer des dockers Prometheus gnmic ainsi  Grafana ensemble: 
 
 ```yaml
 version: '3.8'
@@ -817,7 +818,7 @@ networks:
 
 ![alt text](../image/dockerpstelemetrie.png)
 
-#  Ajouter Prometheus comme source de données dans Grafana
+###  Ajouter Prometheus comme source de données dans Grafana
 
 Une fois Grafana lancé (par défaut sur le port 3000), je me suis connecté à l’interface web :
 
@@ -838,16 +839,17 @@ Dans Grafana :
 
 
 # Pour envoyer des données il faut d'abord installer gnmic 
-curl -sSL https://raw.githubusercontent.com/openconfig/gnmic/main/install.sh | bash
 
-Puis envoyer les données c'est avec cette commande :
-gnmic --config gnmic.yaml subscribe -d
+A laide de la commande `curl -sSL https://raw.githubusercontent.com/openconfig/gnmic/main/install.sh | bash`
+
+Puis pour envoyer les données il faut éxécuter cette commande : 
+`gnmic --config gnmic.yaml subscribe -d`
 
 ![alt text](../image/envoiedemetric.png)
 
 
 
-on peux verifier si nous avons bien recus les données sur le liens ou le curl :
+On peux verifier si nous avons bien recus les données/métrics sur le port 9804 correspondant au port de gnmic :
 
 ![alt text](../image/metrics.png)
 
@@ -855,10 +857,11 @@ on peux verifier si nous avons bien recus les données sur le liens ou le curl :
 
 # Dockerfile FRRouting (FRR)
 
-j'ai créé un Dockerfile permettant de construire une image Docker basée sur FRRouting (FRR). FRRouting est du routage dynamique très utilisée pour gérer des protocoles comme BGP (Border Gateway Protocol) et OSPF. Ce Dockerfile a pour but de configurer un container avec FRR activé, prêt à faire du routage dynamique pour des tests et simulations réseau.
+Nous créé un Dockerfile permettant de construire une image Docker basée sur FRRouting (FRR) c.a.d routage dynamique pour BGP et OSPF. 
 
-# 2. Description de ce que j'ai fait dans le Dockerfile
+### 2. Description de ce que j'ai fait dans le Dockerfile
 
+```go
 FROM frrouting/frr:latest
 
 RUN sed -i 's/bgpd=no/bgpd=yes/' /etc/frr/daemons && \
@@ -869,10 +872,9 @@ RUN sed -i 's/bgpd=no/bgpd=yes/' /etc/frr/daemons && \
 EXPOSE 179/tcp
 EXPOSE 2601/tcp
 EXPOSE 2604/tcp
+```
 
-
-
-Base de l'image :J'ai utilisé l'image officielle frrouting/frr:latest qui contient déjà une installation complète de FRR.
+Base de l'image :Nous avons utilisé l'image officielle frrouting/frr:latest qui contient déjà une installation complète de FRR.
 
 Activation des daemons nécessaires :Par défaut, FRR désactive certains services. J'ai modifié le fichier /etc/frr/daemons pour activer :
 
@@ -880,38 +882,16 @@ bgpd (le démon BGP), qui permet la gestion des sessions BGP.
 
 zebra, qui est le démon central gérant la table de routage.
 
-Cette activation est réalisée grâce à des commandes sed qui remplacent les lignes bgpd=no et zebra=no par bgpd=yes et zebra=yes.
+Exposition des ports nécessaire : **179/TCP** pour bgp et **2061(et4)/TCP** pour FRR (vty)
 
-Gestion des droits :J'ai également changé la propriété des fichiers de configuration FRR (/etc/frr/*) au groupe et utilisateur frr pour éviter des problèmes de permission lors du lancement des services.
-
-Ouverture des ports :J'ai exposé les ports nécessaires :
-
-179/TCP : port standard utilisé par BGP pour établir les sessions entre routeurs.
-
-2601/TCP et 2604/TCP : ports spécifiques à FRR pour la communication interne (par exemple VTY pour les sessions telnet/ssh vers FRR).
-
-# 3. À quoi sert ce Dockerfile ?
-
-Ce Dockerfile sert à construire une image Docker prête à faire du routage BGP. Cette image peut être utilisée pour simuler un routeur BGP dans un environnement virtualisé, ce qui est très utile pour :
-
-Tester des configurations BGP sans matériel physique.
-
-Intégrer dans des topologies réseau simulées (avec Docker Compose ou Containerlab).
-
-Faciliter l’apprentissage et le déploiement rapide de routeurs FRR dans des environnements cloud ou locaux.
-
-# 4. Comment lancer ce Dockerfile ?
-
-Voici les étapes pour construire et lancer un container à partir de ce Dockerfile :
-
-Construction de l'image :Depuis le dossier où se trouve le Dockerfile, lancer la commande :docker build -t frr-custom -f Dockerfile.frr .
-
+### 4. Deploiement Dockerfile.frr
 
 ![alt text](../image/dockerbuildfrr.png)
 
 
 # 5 .Déploiement de la topologie avec Containerlab :
-Après avoir construit et lancé cette image, il faudra créer un fichier YAML décrivant la topologie réseau, par exemple leaf-spine.clab.yml.
+
+*Après avoir construit et lancé cette image, il faudra créer un fichier YAML décrivant la topologie réseau, par exemple leaf-spine.clab.yml.*
 
 
 ![alt text](../image/topologyfrr.png)
@@ -920,9 +900,7 @@ Après avoir construit et lancé cette image, il faudra créer un fichier YAML d
 
 
 
-Pour déployer la topologie, il suffit ensuite de lancer la commande :
-
-sudo containerlab deploy -t leaf-spine.clab.yml
+Pour déployer la topologie, il suffit ensuite de lancer la commande : `sudo containerlab deploy -t leaf-spine.clab.yml`
 
 ![alt text](../image/dockerfilefrrrcontainerlabdeploy.png)
 
@@ -930,15 +908,14 @@ Cette commande va automatiquement déployer les containers basés sur l’image 
 
 ![alt text](../image/containerlabdockerfileefrrjusteavant%20draaw..png)
 
-voici le drawio:
-
+Voici la topologie (topoviewer) disponible a l'aide de Containerlab(VsCode)
 
 
 ![alt text](../image/drawfrr.png)
 
-voici les commandes a taper dans chaque routeur pour mettre en place le bgp :
+Mise en place du bgp dans chaque router:
 
-```
+```go
 Configurations BGP 
 Spines (route-reflectors)
  Spine1 (172.20.20.7)
@@ -1031,43 +1008,58 @@ end
 write
 ```
 
-on peut voir que les bgp est bien mit en place et que j'arrive a ping tout le monde :
+Le BGP est bien mis en place et le ping aux autres routeurs fonctionne également en témoigne les screens ci dessous :
 ![alt text](../image/bgpdockerfilefrr.png)
 
 
 ![alt text](../image/pingbgpdockerfilfrr.png)
 
+# Vérification haute dispo pour infrastructure
 
-# kuma 
+Nous avons testé si, un spine tombe, l’infrastructure tiens.
 
-Nous avons mis en place Update Kuma comme outil de supervision afin de surveiller l’état de différents services critiques de mon infrastructure. Plus précisément, j’ai configuré des vérifications régulières pour :
 
-  Le DNS, afin de m’assurer que la résolution de noms fonctionne correctement.
+Avant de faire tomber le spine 2, nous avons depuis le leaf 3 effectué un traceroute vers le catalyst du groupe de Mathias:
 
- Le service LDP (Label Distribution Protocol), pour vérifier la bonne distribution des labels dans le réseau MPLS.
+![alt text](../image/hauteavant.png)
 
-  Le HAProxy, pour contrôler le bon fonctionnement du répartiteur de charge et garantir l’accessibilité des services derrière le proxy.
+Nous voyons que le traceroute passe par le Spine 2 (l’IP **192.168.55.2**)
 
-Ces vérifications permettent de détecter rapidement toute anomalie et d'assurer une disponibilité optimale des services supervisés.
+Maintenant, nous désactivons **toutes les interfaces** du Spine 2:
+
+![alt text](../image/hauteapres.png)
+
+Et comme vous pouvez voir sur la capture d’écran, à la dernière commande, le traceroute passe par le Spine 1 (**l’ip 192.168.93.10**):
+
+![alt text](../image/hautepreuve.png)
+
+Cela prouve bien la haute disponibilité de notre architecture.
+
+# HA-PROXY
+
+Nous avons choisi HA Proxy pour assurer de la haute disponibilité pour l’accès de notre serveur web. Si l'un tombe, un autre prend le relais.
+
+Voici le fichier de configuration avec en bas renseigné les deux IP des serveur web qui doivent être joints:
+
+![alt text](../image/haproxyconf.png)
+
+Pour vérifier son bon fonctionnement, sur une machine de la salle, nous avons fait un curl -I suivit de l’ip de HA-Proxy , et nous remarquons que a chaque curl nous avons une réponse un coup du serveur web 1 (nginx) et un coup du serveur web 2 (apache):
+
+![alt text](../image/haproxypreuve.png)
+
+
+# Uptime-Kuma  
+
+*On a mis en place un docker uptime-kuma lié au réseau Leaf&Spine via le catalyst comme outil de supervision afin de surveiller l’état de mon infrastructure.*
+
+*Le DNS, LDAP ainsi que notre HAProxy qui réunit plusieurs lien web en  guise d'équilibreur de charge*
 
 ![alt text](../image/kumaaa.png)
 
-
-
-
-
-
-
-
-
-
-
-
-
+On peut voir qu'actuellement ils tournent tous correctement 
 
 
 <h2 style="color: #339CFF;">Problème Rencontré</h2>
 
-IBRAHIMA BALDE
-
-<h2 style="color: #339CFF;">sources</h2>
+Au cours de cette SAE, plusieurs difficultés ont été rencontrées. Tout d’abord, l’oubli de certaines routes a constitué un problème mineur mais aux conséquences importantes, rapidement corrigé après identification. Concernant le Catalyst, la VM Router a subi un freeze ; après plusieurs tentatives infructueuses de réinitialisation, il a finalement été nécessaire de changer de Catalyst pour poursuivre le projet. Une erreur de configuration a également été commise en plaçant deux bridges lan-br, ce qui a rendu le Catalyst inopérant. Malgré la suppression de l’un des bridges via le CLI, il n’a pas été possible de récupérer l’interface web, ce qui a conduit à une réinitialisation complète du matériel.
+Du côté du Mikrotik, le service DHCP attribuait initialement de mauvaises adresses IP, un problème qui a été rapidement résolu en retirant le service fautif. L’implémentation simultanée d’OSPF et de BGP a posé des difficultés, notamment concernant la redistribution des loopbacks qui n’a pas abouti comme prévu. Enfin, la partie télémétrie n’a été que partiellement réussie : la configuration a pu avancer jusqu’à l’utilisation de gnmic, et une solution potentielle a été identifiée pour aller plus loin.
