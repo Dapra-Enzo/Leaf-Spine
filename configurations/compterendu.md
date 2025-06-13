@@ -869,6 +869,19 @@ voici le drawio:
 ![alt text](../image/drawfrr.png)
 
 
+# kuma 
+
+J’ai mis en place Update Kuma comme outil de supervision afin de surveiller l’état de différents services critiques de mon infrastructure. Plus précisément, j’ai configuré des vérifications régulières pour :
+
+  Le DNS, afin de m’assurer que la résolution de noms fonctionne correctement.
+
+ Le service LDP (Label Distribution Protocol), pour vérifier la bonne distribution des labels dans le réseau MPLS.
+
+  Le HAProxy, pour contrôler le bon fonctionnement du répartiteur de charge et garantir l’accessibilité des services derrière le proxy.
+
+Ces vérifications permettent de détecter rapidement toute anomalie et d'assurer une disponibilité optimale des services supervisés.
+
+![alt text](../image/kumaaa.png)
 
 
 
