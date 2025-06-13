@@ -686,7 +686,7 @@ networks:
 
 docker-compose up -d
 
-![alt text](<Capture d’écran du 2025-06-12 16-28-33.png>)
+![alt text](../image/dockerpstelemetrie.png)
 
 # . Ajouter Prometheus comme source de données dans Grafana
 
@@ -703,9 +703,9 @@ Dans Grafana :
     apres save et test
     et nous avons acces a nos metric
 
-![alt text](<Capture d’écran du 2025-06-12 16-27-04.png>)
+![alt text](../image/donnéesgrafana.png)
 
-![alt text](image-1.png)
+![alt text](../image/prometheusup.png)
 
 
 # Pour envoyer des données il faut d'abord installer gnmic 
@@ -714,13 +714,101 @@ curl -sSL https://raw.githubusercontent.com/openconfig/gnmic/main/install.sh | b
 Puis envoyer les données c'est avec cette commande :
 gnmic --config gnmic.yaml subscribe -d
 
-![alt text](../image/envoiedemetric.pbg)
+![alt text](../image/envoiedemetric.png)
 
 
 
 on peux verifier si nous avons bien recus les données sur le liens ou le curl :
 
 ![alt text](../image/metrics.png)
+
+
+
+# Dockerfile FRRouting (FRR)
+
+j'ai créé un Dockerfile permettant de construire une image Docker basée sur FRRouting (FRR). FRRouting est du routage dynamique très utilisée pour gérer des protocoles comme BGP (Border Gateway Protocol) et OSPF. Ce Dockerfile a pour but de configurer un container avec FRR activé, prêt à faire du routage dynamique pour des tests et simulations réseau.
+
+# 2. Description de ce que j'ai fait dans le Dockerfile
+
+FROM frrouting/frr:latest
+
+RUN sed -i 's/bgpd=no/bgpd=yes/' /etc/frr/daemons && \
+    sed -i 's/zebra=no/zebra=yes/' /etc/frr/daemons && \
+    chown frr:frr /etc/frr/*
+
+
+EXPOSE 179/tcp
+EXPOSE 2601/tcp
+EXPOSE 2604/tcp
+
+
+
+Base de l'image :J'ai utilisé l'image officielle frrouting/frr:latest qui contient déjà une installation complète de FRR.
+
+Activation des daemons nécessaires :Par défaut, FRR désactive certains services. J'ai modifié le fichier /etc/frr/daemons pour activer :
+
+bgpd (le démon BGP), qui permet la gestion des sessions BGP.
+
+zebra, qui est le démon central gérant la table de routage.
+
+Cette activation est réalisée grâce à des commandes sed qui remplacent les lignes bgpd=no et zebra=no par bgpd=yes et zebra=yes.
+
+Gestion des droits :J'ai également changé la propriété des fichiers de configuration FRR (/etc/frr/*) au groupe et utilisateur frr pour éviter des problèmes de permission lors du lancement des services.
+
+Ouverture des ports :J'ai exposé les ports nécessaires :
+
+179/TCP : port standard utilisé par BGP pour établir les sessions entre routeurs.
+
+2601/TCP et 2604/TCP : ports spécifiques à FRR pour la communication interne (par exemple VTY pour les sessions telnet/ssh vers FRR).
+
+# 3. À quoi sert ce Dockerfile ?
+
+Ce Dockerfile sert à construire une image Docker prête à faire du routage BGP. Cette image peut être utilisée pour simuler un routeur BGP dans un environnement virtualisé, ce qui est très utile pour :
+
+Tester des configurations BGP sans matériel physique.
+
+Intégrer dans des topologies réseau simulées (avec Docker Compose ou Containerlab).
+
+Faciliter l’apprentissage et le déploiement rapide de routeurs FRR dans des environnements cloud ou locaux.
+
+# 4. Comment lancer ce Dockerfile ?
+
+Voici les étapes pour construire et lancer un container à partir de ce Dockerfile :
+
+Construction de l'image :Depuis le dossier où se trouve le Dockerfile, lancer la commande :docker build -t frr-custom -f Dockerfile.frr .
+
+
+![alt text](../image/dockerbuildfrr.png)
+
+
+# 5 .Déploiement de la topologie avec Containerlab :
+Après avoir construit et lancé cette image, il faudra créer un fichier YAML décrivant la topologie réseau, par exemple leaf-spine.clab.yml.
+
+
+![alt text](../image/topologyfrr.png)
+
+
+
+Pour déployer la topologie, il suffit ensuite de lancer la commande :
+
+sudo containerlab deploy -t leaf-spine.clab.yml
+
+![alt text](../image/dockerfilefrrrcontainerlabdeploy.png)
+
+Cette commande va automatiquement déployer les containers basés sur l’image FRR configurée et interconnecter les routeurs selon la topologie définie.
+
+![alt text](../image/containerlabdockerfileefrrjusteavant%20draaw..png)
+
+voici le drawio:
+
+
+
+![alt text](../image/drawfrr.png)
+
+
+
+
+
 
 
 
