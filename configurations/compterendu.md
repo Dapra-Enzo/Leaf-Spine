@@ -455,27 +455,85 @@ Pour l'intégration du VPN nous avons opté pour Wireguard Easy une solution qui
   docker pull weejewel/wg-easy:latest
   ```
 
-- **Modification fichier yaml**
-  ```shell
-      wg-easy:
-      kind: linux
-      image: weejewel/wg-easy:latest
-      binds:
-        - ./wg-easy-data:/etc/wireguard
-      ports:
-        - 51821:51821/tcp
-        - 51820:51820/udp
-      env:
-        - WG_HOST=192.168.93.60  
-        - PASSWORD=wireguardadmin
-        - WG_PORT=51820
+- **Modification du docker compose**
+```shell
+volumes:
+  etc_wireguard:
 
-    - endpoints: ["leaf3:eth3", "wg-easy:eth1"]
+services:
+  wg-easy:
+	environment:
+  	- PORT=51821
+  	- HOST=0.0.0.0
+  	- INSECURE=true
 
-    !! si ca fonctionne pas ajouter ip route add 10.202.8.0/24 via <IP_eth1_wg-easy> 
-  ```
+	image: ghcr.io/wg-easy/wg-easy:15
+	container_name: wg-easy
+	networks:
+  	wg:
+    	ipv4_address: 10.202.30.1
+	volumes:
+  	- etc_wireguard:/etc/wireguard
+  	- /lib/modules:/lib/modules:ro
+	ports:
+  	- "51820:51820/udp"
+  	- "51821:51821/tcp"
+	restart: unless-stopped
+	cap_add:
+  	- NET_ADMIN
+  	- SYS_MODULE
+	sysctls:
+  	- net.ipv4.ip_forward=1
+  	- net.ipv4.conf.all.src_valid_mark=1
+
+networks:
+  wg:
+	driver: macvlan
+	enable_ipv6: false
+	driver_opts:
+  	parent: enp0s31f6
+	ipam:
+  	config:
+    	- subnet: 10.202.0.0/16
+      	gateway: 10.202.10.1
 
 
+```
+
+
+Le bon fonctionnement de WireGuard est confirmé par la présence du point rouge indiquant une connexion active, ainsi que par l’affichage des débits en émission et en réception.
+
+![alt text](../image/wireguardserver.png)
+
+## Partie client ##
+ creation du wg0.conf :
+
+ `nano wg0.conf `
+```
+[Interface]
+PrivateKey = OOneb7ESOy06kfgS3ISj4I7MfAGwFIbMka4aBCi79F0=
+Address = 10.8.0.5/24, fdcc:ad94:bacf:61a4::cafe:5/112
+DNS = 1.1.1.1, 2606:4700:4700::1111
+MTU = 1420
+
+[Peer]
+PublicKey = ua5pK/+TZK1H+XCd1/zDuek1JtHV19t4Zb2VGg1Qcjg=
+PresharedKey = fVxfg7BMOq3uFgDbxeaPg+KFtgz6C2/bjOKJUt21z60=
+AllowedIPs = 0.0.0.0/0, ::/0
+PersistentKeepalive = 0
+Endpoint = 10.202.30.1:51820
+
+```
+![alt text](../image/vpnshow.png)
+
+
+le groupe de mathis qui est depuis son datacenter arrive a acceder aux serveur dns dans notre data center grace aux vpn :
+
+![alt text](../image/digmathis.png)
+
+nous accedons aussi aux leur grace aux vpn :
+
+![alt text](../image/digdemathis.png)
 ---
 <h2 style="color: #339CFF;">Monitoring/Supervision</h2>
 
@@ -693,7 +751,7 @@ networks:
 
 ![alt text](../image/dockerpstelemetrie.png)
 
-# . Ajouter Prometheus comme source de données dans Grafana
+#  Ajouter Prometheus comme source de données dans Grafana
 
 Une fois Grafana lancé (par défaut sur le port 3000), je me suis connecté à l’interface web :
 
