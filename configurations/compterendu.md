@@ -551,7 +551,7 @@ targets:
 
 subscriptions:
 
-   . Interface Ethernet1 état + compteurs
+    #Interface Ethernet1 état + compteurs
   ethernet1-state:
     paths:
       - /interfaces/interface[name=Ethernet1]/state
@@ -559,7 +559,7 @@ subscriptions:
     stream-mode: sample
     sample-interval: 5s
 
-   4. 5. BGP neighbors et état session
+   #4. 5. BGP neighbors et état session
   bgp-neighbors-state:
     paths:
       - /network-instances/network-instance[name=default]/protocols/protocol[identifier=BGP][name=BGP]/bgp/neighbors/neighbor
@@ -568,21 +568,21 @@ subscriptions:
     sample-interval: 20s
     format: prom
 
-  6. Toutes les infos de l’équipement (system subtree)
+  #6. Toutes les infos de l’équipement (system subtree)
   system-info:
     paths:
       - /system
     stream-mode: sample
     sample-interval: 60s
 
-   7. Etat mémoire
+   #7. Etat mémoire
   memory-state:
     paths:
       - /system/memory/state
     stream-mode: sample
     sample-interval: 15s
 
-   8. Nombre de CPU en format flat
+   #8. Nombre de CPU en format flat
   cpu-info-flat:
     paths:
       - /system/cpus/cpu
@@ -592,14 +592,14 @@ subscriptions:
 
 
 
-   10. Souscrire aux compteurs interface Ethernet1 toutes les 5s
+   #10. Souscrire aux compteurs interface Ethernet1 toutes les 5s
   ethernet1-counters-sub:
     paths:
       - /interfaces/interface[name=Ethernet1]/state/counters
     stream-mode: sample
     sample-interval: 5s
 
-  11. Récupérer les routes BGP (attention à la hiérarchie précise)
+  #11. Récupérer les routes BGP (attention à la hiérarchie précise)
   bgp-routes:
     paths:
       - /network-instances/network-instance[name=default]/protocols/protocol[identifier=BGP][name=BGP]/bgp/rib/afi-safis/afi-safi/ipv4-unicast/loc-rib/routes/route
@@ -607,7 +607,7 @@ subscriptions:
     sample-interval: 30s
     format: prom
 
-  12. Processus et leur nombre
+  #12. Processus et leur nombre
   processes-info:
     paths:
       - /system/processes/process
