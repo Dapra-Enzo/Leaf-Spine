@@ -1,6 +1,6 @@
 # SAé DevCloud_4D01: Développer et déployer un microservice dans un environnement virtualisé
 
-Bienvenue sur le dépôt de la SAE DevCloud 4D01,de la team Yokoso : une infrastructure réseau automatisée, moderne et supervisée.
+Bienvenue sur le dépôt de la SAE DevCloud 4D01,de la team Yokoso
 
 ---
 
