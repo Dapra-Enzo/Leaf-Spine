@@ -467,7 +467,9 @@ Enfin, il est possible de vérifier l’ensemble des routes apprises en ligne de
 ![alt text](../image/mikrotik_commande_verifroutes.png)
 
 Pour valider l’intégration du routeur MikroTik dans l’infrastructure réseau et vérifier le bon fonctionnement des protocoles de routage, plusieurs tests ont été réalisés depuis ce routeur :
+
 ![alt text](../image/pingmicro.png)
+
 
 Ping vers le leaf du réseau interne du groupe de Mathis : ce test confirme que le MikroTik est bien capable d’atteindre les équipements internes des autres groupes, prouvant que le routage intergroupe est fonctionnel.
 
