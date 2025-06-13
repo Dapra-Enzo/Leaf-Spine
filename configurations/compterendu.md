@@ -87,6 +87,8 @@
 Pour assurer un suivi rigoureux et transparent de l’avancement de notre projet, nous avons choisi d’utiliser la fonctionnalité **Projets** de GitHub, et plus particulièrement le modèle **Kanban** (voir image ci-dessous ![image2](image2)). Ce choix nous a permis d’organiser efficacement les tâches, de répartir le travail entre les membres de l’équipe, et de garantir une validation régulière des jalons par le BBP (Big Boss Pouchou), conformément aux exigences du sujet.
 
 Le tableau Kanban, accessible via l’onglet "Projects" du dépôt GitHub de notre groupe, se compose de plusieurs colonnes :  
+
+![alt text](../image/tempsgithub.png)
 - **À faire** : toutes les tâches identifiées mais non commencées  
 - **En cours** : tâches en cours de réalisation  
 - **Terminé** : tâches finalisées  
@@ -106,12 +108,12 @@ Pour un détail complet des tickets et du suivi, le fichier CSV est disponible [
 
 ### Enzo
 
-
+![alt text](../image/enzofromage.png)
 ### Salah
-
+![alt text](../image/salahfromage.png)
 
 ### Pierre
-
+![alt text](../image/pierrefromage.png)
 
 <h2 style="color: #339CFF;">Choix des Technos + Plan d'adressage avec son schéma</h2>
 
