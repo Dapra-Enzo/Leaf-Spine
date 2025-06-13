@@ -1,0 +1,29 @@
+log-level: info
+
+targets:
+  spine1:
+    address: 172.20.20.2:6030
+    username: gnmiuser
+    password: MonMotDePasse123
+    skip-verify: true
+
+subscriptions:
+  ospf:
+    paths:
+      - /network-instances/network-instance[name=default]/protocols/protocol[identifier=OSPF][name=1]/ospfv2
+    mode: stream
+    sample-interval: 10s
+    stream-mode: sample
+
+  bgp:
+    paths:
+      - /network-instances/network-instance[name=default]/protocols/protocol[identifier=BGP][name=BGP]/bgp
+    mode: stream
+    sample-interval: 10s
+    stream-mode: sample
+
+outputs:
+  prometheus:
+    type: prometheus
+    address: ":9804"
+    path: "/metrics"
