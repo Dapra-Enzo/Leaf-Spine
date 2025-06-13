@@ -489,7 +489,17 @@ Nous avons régulièrement effectué des backup du mikrotik pour éviter des pro
 
 
 
-<h2 style="color: #339CFF;">Configuration de Containerlab</h2>
+<h2 style="color: #339CFF;">Verification des leafs & spines</h2>
+
+![alt texte](../image/spine1conf.png)
+
+![alt texte](../image/spine2conf.png)
+
+![alt texte](../image/leaf1conf.png)
+
+![alt texte](../image/leaf2conf.png)
+
+![alt texte](../image/leaf3conf.png)
 
 <h2 style="color: #339CFF;">Ajout des micro services</h2>
 
