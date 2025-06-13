@@ -120,13 +120,225 @@ Pour un détail complet des tickets et du suivi, le fichier CSV est disponible [
 
 ---
 
-### Routage dynamique
+### Routage dynamiquespine1# sh ip bgp neighbors 
+BGP neighbor is 172.20.20.8, remote AS 64555, local AS 64555, internal link
+  Local Role: undefined
+  Remote Role: undefined
+Hostname: leaf2
+  BGP version 4, remote router ID 1.1.1.4, local router ID 1.1.1.1
+  BGP state = Established, up for 00:00:56
+  Last read 00:00:55, Last write 00:00:56
+  Hold time is 180 seconds, keepalive interval is 60 seconds
+  Configured hold time is 180 seconds, keepalive interval is 60 seconds
+  Configured conditional advertisements interval is 60 seconds
+  Neighbor capabilities:
+    4 Byte AS: advertised and received
+    Extended Message: advertised and received
+    AddPath:
+      IPv4 Unicast: RX advertised and received
+    Long-lived Graceful Restart: advertised and received
+      Address families by peer:
+    Route refresh: advertised and received(old & new)
+    Enhanced Route Refresh: advertised and received
+    Address Family IPv4 Unicast: advertised and received
+    Hostname Capability: advertised (name: spine1,domain name: n/a) received (name: leaf2,domain name: n/a)
+    Graceful Restart Capability: advertised and received
+      Remote Restart timer is 120 seconds
+      Address families by peer:
+        none
+  Graceful restart information:
+    End-of-RIB send: IPv4 Unicast
+    End-of-RIB received: IPv4 Unicast
+    Local GR Mode: Helper*
+    Remote GR Mode: Helper
+    R bit: True
+    N bit: True
+    Timers:
+      Configured Restart Time(sec): 120
+      Received Restart Time(sec): 120
+    IPv4 Unicast:
+      F bit: False
+      End-of-RIB sent: Yes
+      End-of-RIB sent after update: Yes
+      End-of-RIB received: Yes
+      Timers:
+        Configured Stale Path Time(sec): 360
+  Message statistics:
+    Inq depth is 0
+    Outq depth is 0
+                         Sent       Rcvd
+    Opens:                  1          1
+    Notifications:          0          0
+    Updates:                1          1
+    Keepalives:             1          1
+    Route Refresh:          0          0
+    Capability:             0          0
+    Total:                  3          3
+  Minimum time between advertisement runs is 0 seconds
 
-- **iBGP** a été utilisé entre le Catalyst et MikroTik, entre Catalyst et Spine1, ainsi qu’entre MikroTik et Spine2.  
-  **Pourquoi ce choix ?**  
-  - L’iBGP permet une gestion fine des routes au sein de notre AS privé (AS64555).
-  - Il offre un contrôle précis sur la distribution des routes et facilite la redondance.
-  - Cela simplifie l’interconnexion entre équipements “core” tout en gardant la maîtrise sur les annonces.
+ For address family: IPv4 Unicast
+  Update group 1, subgroup 1
+  Packet Queue length 0
+  Route-Reflector Client
+  Community attribute sent to this neighbor(all)
+  0 accepted prefixes
+
+  Connections established 1; dropped 0
+  Last reset 00:01:47,  No AFI/SAFI activated for peer
+  Internal BGP neighbor may be up to 255 hops away.
+Local host: 172.20.20.7, Local port: 179
+Foreign host: 172.20.20.8, Foreign port: 48886
+Nexthop: 172.20.20.7
+Nexthop global: 3fff:172:20:20::7
+Nexthop local: fe80::42:acff:fe14:1407
+BGP connection: shared network
+BGP Connect Retry Timer in Seconds: 120
+Read thread: on  Write thread: on  FD used: 25
+
+BGP neighbor is 172.20.20.9, remote AS 64555, local AS 64555, internal link
+  Local Role: undefined
+  Remote Role: undefined
+Hostname: leaf1
+  BGP version 4, remote router ID 1.1.1.3, local router ID 1.1.1.1
+  BGP state = Established, up for 00:01:10
+  Last read 00:00:10, Last write 00:00:10
+  Hold time is 180 seconds, keepalive interval is 60 seconds
+  Configured hold time is 180 seconds, keepalive interval is 60 seconds
+  Configured conditional advertisements interval is 60 seconds
+  Neighbor capabilities:
+    4 Byte AS: advertised and received
+    Extended Message: advertised and received
+    AddPath:
+      IPv4 Unicast: RX advertised and received
+    Long-lived Graceful Restart: advertised and received
+      Address families by peer:
+    Route refresh: advertised and received(old & new)
+    Enhanced Route Refresh: advertised and received
+    Address Family IPv4 Unicast: advertised and received
+    Hostname Capability: advertised (name: spine1,domain name: n/a) received (name: leaf1,domain name: n/a)
+    Graceful Restart Capability: advertised and received
+      Remote Restart timer is 120 seconds
+      Address families by peer:
+        none
+  Graceful restart information:
+    End-of-RIB send: IPv4 Unicast
+    End-of-RIB received: IPv4 Unicast
+    Local GR Mode: Helper*
+    Remote GR Mode: Helper
+    R bit: True
+    N bit: True
+    Timers:
+      Configured Restart Time(sec): 120
+      Received Restart Time(sec): 120
+    IPv4 Unicast:
+      F bit: False
+      End-of-RIB sent: Yes
+      End-of-RIB sent after update: Yes
+      End-of-RIB received: Yes
+      Timers:
+        Configured Stale Path Time(sec): 360
+  Message statistics:
+    Inq depth is 0
+    Outq depth is 0
+                         Sent       Rcvd
+    Opens:                  1          1
+    Notifications:          0          0
+    Updates:                1          1
+    Keepalives:             2          2
+    Route Refresh:          0          0
+    Capability:             0          0
+    Total:                  4          4
+  Minimum time between advertisement runs is 0 seconds
+
+ For address family: IPv4 Unicast
+  Update group 1, subgroup 1
+  Packet Queue length 0
+  Route-Reflector Client
+  Community attribute sent to this neighbor(all)
+  0 accepted prefixes
+
+  Connections established 1; dropped 0
+  Last reset 00:01:47,  No AFI/SAFI activated for peer
+  Internal BGP neighbor may be up to 255 hops away.
+Local host: 172.20.20.7, Local port: 179
+Foreign host: 172.20.20.9, Foreign port: 59798
+Nexthop: 172.20.20.7
+Nexthop global: 3fff:172:20:20::7
+Nexthop local: fe80::42:acff:fe14:1407
+BGP connection: shared network
+BGP Connect Retry Timer in Seconds: 120
+Estimated round trip time: 4 ms
+Read thread: on  Write thread: on  FD used: 22
+
+BGP neighbor is 172.20.20.10, remote AS 64555, local AS 64555, internal link
+  Local Role: undefined
+  Remote Role: undefined
+Hostname: leaf3
+  BGP version 4, remote router ID 1.1.1.5, local router ID 1.1.1.1
+  BGP state = Established, up for 00:00:40
+  Last read 00:00:39, Last write 00:00:40
+  Hold time is 180 seconds, keepalive interval is 60 seconds
+  Configured hold time is 180 seconds, keepalive interval is 60 seconds
+  Configured conditional advertisements interval is 60 seconds
+  Neighbor capabilities:
+    4 Byte AS: advertised and received
+    Extended Message: advertised and received
+    AddPath:
+      IPv4 Unicast: RX advertised and received
+    Long-lived Graceful Restart: advertised and received
+      Address families by peer:
+    Route refresh: advertised and received(old & new)
+    Enhanced Route Refresh: advertised and received
+    Address Family IPv4 Unicast: advertised and received
+    Hostname Capability: advertised (name: spine1,domain name: n/a) received (name: leaf3,domain name: n/a)
+    Graceful Restart Capability: advertised and received
+      Remote Restart timer is 120 seconds
+      Address families by peer:
+        none
+  Graceful restart information:
+    End-of-RIB send: IPv4 Unicast
+    End-of-RIB received: IPv4 Unicast
+    Local GR Mode: Helper*
+    Remote GR Mode: Helper
+    R bit: True
+    N bit: True
+    Timers:
+      Configured Restart Time(sec): 120
+      Received Restart Time(sec): 120
+    IPv4 Unicast:
+      F bit: False
+      End-of-RIB sent: Yes
+      End-of-RIB sent after update: Yes
+      End-of-RIB received: Yes
+      Timers:
+        Configured Stale Path Time(sec): 360
+  Message statistics:
+    Inq depth is 0
+    Outq depth is 0
+                         Sent       Rcvd
+    Opens:                  1          1
+    Notifications:          0          0
+    Updates:                1          1
+    Keepalives:             1          1
+    Route Refresh:          0          0
+    Capability:             0          0
+    Total:                  3          3
+  Minimum time between advertisement runs is 0 seconds
+
+ For address family: IPv4 Unicast
+  Update group 1, subgroup 1
+  Packet Queue length 0
+  Route-Reflector Client
+  Community attribute sent to this neighbor(all)
+  0 accepted prefixes
+
+  Connections established 1; dropped 0
+  Last reset 00:01:47,  No AFI/SAFI activated for peer
+  Internal BGP neighbor may be up to 255 hops away.
+Local host: 172.20.20.7, Local port: 179
+Foreign host: 172.20.20.10, Foreign port: 60716
+Nexthop: 172.20.20.7
+Nexthop global: 3fff:172 gardant la maîtrise sur les annonces.
 - **OSPF** est employé pour le reste du réseau.  
   **Avantages :**
   - OSPF est rapide à converger et parfaitement adapté pour la diffusion automatique des routes dans une topologie leaf & spine.
@@ -852,6 +1064,8 @@ Après avoir construit et lancé cette image, il faudra créer un fichier YAML d
 
 
 
+
+
 Pour déployer la topologie, il suffit ensuite de lancer la commande :
 
 sudo containerlab deploy -t leaf-spine.clab.yml
@@ -868,6 +1082,107 @@ voici le drawio:
 
 ![alt text](../image/drawfrr.png)
 
+voici les commandes a taper dans chaque routeur pour mettre en place le bgp :
+
+```
+Configurations BGP 
+Spines (route-reflectors)
+ Spine1 (172.20.20.7)
+configure terminal
+router bgp 64555
+ bgp router-id 1.1.1.1
+ bgp cluster-id 1.1.1.1
+ bgp log-neighbor-changes
+ neighbor 172.20.20.9 remote-as 64555
+ neighbor 172.20.20.9 route-reflector-client
+ neighbor 172.20.20.8 remote-as 64555
+ neighbor 172.20.20.8 route-reflector-client
+ neighbor 172.20.20.10 remote-as 64555
+ neighbor 172.20.20.10 route-reflector-client
+ address-family ipv4 unicast
+  neighbor 172.20.20.9 activate
+  neighbor 172.20.20.8 activate
+  neighbor 172.20.20.10 activate
+ exit-address-family
+end
+write
+
+
+Spine2 (172.20.20.11)
+configure terminal
+router bgp 64555
+ bgp router-id 1.1.1.2
+ bgp cluster-id 1.1.1.2
+ bgp log-neighbor-changes
+ bgp log-neighbor-changes
+ neighbor 172.20.20.9 remote-as 64555
+ neighbor 172.20.20.9 route-reflector-client
+ neighbor 172.20.20.8 remote-as 64555
+ neighbor 172.20.20.8 route-reflector-client
+ neighbor 172.20.20.10 remote-as 64555
+ neighbor 172.20.20.10 route-reflector-client
+ address-family ipv4 unicast
+  neighbor 172.20.20.9 activate
+  neighbor 172.20.20.8 activate
+  neighbor 172.20.20.10 activate
+ exit-address-family
+end
+write
+
+
+
+Leafs (leaf1, leaf2, leaf3)
+Leaf1 (172.20.20.9)
+configure terminal
+router bgp 64555
+ bgp router-id 1.1.1.3
+ bgp log-neighbor-changes
+ neighbor 172.20.20.7 remote-as 64555
+ neighbor 172.20.20.11 remote-as 64555
+ address-family ipv4 unicast
+  neighbor 172.20.20.7 activate
+  neighbor 172.20.20.11 activate
+ exit-address-family
+end
+write
+
+
+Leaf2 (172.20.20.8)
+configure terminal
+router bgp 64555
+ bgp router-id 1.1.1.4
+ bgp log-neighbor-changes
+ neighbor 172.20.20.7 remote-as 64555
+ neighbor 172.20.20.11 remote-as 64555
+ address-family ipv4 unicast
+  neighbor 172.20.20.7 activate
+  neighbor 172.20.20.11 activate
+ exit-address-family
+end
+write
+
+
+ Leaf3 (172.20.20.10)
+configure terminal
+router bgp 64555
+ bgp router-id 1.1.1.5
+ bgp log-neighbor-changes
+ neighbor 172.20.20.7 remote-as 64555
+ neighbor 172.20.20.11 remote-as 64555
+ address-family ipv4 unicast
+  neighbor 172.20.20.7 activate
+  neighbor 172.20.20.11 activate
+ exit-address-family
+end
+write
+```
+
+on peut voir que les bgp est bien mit en place et que j'arrive a ping tout le monde :
+![alt text](../image/bgpdockerfilefrr.png)
+
+
+![alt text](../image/pingbgpdockerfilfrr.png)
+
 
 # kuma 
 
@@ -882,6 +1197,8 @@ J’ai mis en place Update Kuma comme outil de supervision afin de surveiller l�
 Ces vérifications permettent de détecter rapidement toute anomalie et d'assurer une disponibilité optimale des services supervisés.
 
 ![alt text](../image/kumaaa.png)
+
+
 
 
 
