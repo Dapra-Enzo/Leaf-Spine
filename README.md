@@ -33,23 +33,10 @@ cd yokoso
 
 ---
 
-## 👥 Répartition des tâches
-
-La répartition détaillée (camemberts inclus) et le bilan sont disponibles dans la documentation finale (`/docs/documentation_finale.md`).
-
----
-
-## 📄 Documentation
-
-- Documentation finale complète : [`/docs/documentation_finale.md`](docs/documentation_finale.md)
-- Plan d’adressage et schémas : dossier `/docs/`
-- Scripts de configuration : dossier `/scripts/`
-
----
 
 ## ✍️ Auteurs
 
-Enzo Dapra • Pierre [Nom] • Salah [Nom]
+Enzo Dapra • Pierre Jaloghlian • Salah Boudina
 
 ---
 
