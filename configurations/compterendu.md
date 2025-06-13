@@ -714,10 +714,13 @@ curl -sSL https://raw.githubusercontent.com/openconfig/gnmic/main/install.sh | b
 Puis envoyer les données c'est avec cette commande :
 gnmic --config gnmic.yaml subscribe -d
 
-![alt text](image-2.png)
+![alt text](../image/envoiedemetric.pbg)
+
 
 
 on peux verifier si nous avons bien recus les données sur le liens ou le curl :
+
+![alt text](../image/metrics.png)
 
 
 
