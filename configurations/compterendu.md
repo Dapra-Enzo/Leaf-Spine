@@ -1186,7 +1186,7 @@ on peut voir que les bgp est bien mit en place et que j'arrive a ping tout le mo
 
 # kuma 
 
-J’ai mis en place Update Kuma comme outil de supervision afin de surveiller l’état de différents services critiques de mon infrastructure. Plus précisément, j’ai configuré des vérifications régulières pour :
+Nous avons mis en place Update Kuma comme outil de supervision afin de surveiller l’état de différents services critiques de mon infrastructure. Plus précisément, j’ai configuré des vérifications régulières pour :
 
   Le DNS, afin de m’assurer que la résolution de noms fonctionne correctement.
 
